@@ -1,22 +1,24 @@
 import logo from "./logo.svg";
 import "./App.css";
+import { useHackerNewsApi } from "../hook/useHackerNewsApi";
 import { useState } from "react";
-
-import { useDataApi } from "./hook/useDataApi";
 
 const initUrl = "http://hn.algolia.com/api/v1/search?query=redux";
 const initData = { hits: [] };
 
 function App() {
   const [query, setQuery] = useState("redux");
-  const [news, setNews] = useDataApi(initUrl, initData);
+  const [{ data, isLoading, isError }, doFetch] = useHackerNewsApi(
+    initUrl,
+    initData
+  );
 
   return (
     <div className="App">
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          setNews(`https:/hn.algolia.com/api/v1/search?query=${query}`);
+          doFetch(`https:/hn.algolia.com/api/v1/search?query=${query}`);
         }}
       >
         <input
@@ -27,12 +29,12 @@ function App() {
         <button type="submit">Search</button>
       </form>
 
-      {news.isError && <div>Something went wrong ...</div>}
-      {news.isLoading ? (
+      {isError && <div>Something went wrong ...</div>}
+      {isLoading ? (
         <div>Loading...</div>
       ) : (
         <ul>
-          {news.data.hits.map((item) => (
+          {data.hits.map((item) => (
             <li key={item.objectID}>
               <a href={item.url}>{item.title}</a>
             </li>

@@ -2,7 +2,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import { useState } from "react";
 
-import { useDataApi } from "./hook/useDataApi";
+import { useDataApi } from "../hook/useDataApi";
 
 const initUrl = "http://hn.algolia.com/api/v1/search?query=redux";
 const initData = { hits: [] };
